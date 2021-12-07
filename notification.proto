@@ -1,0 +1,23 @@
+syntax="proto3";
+
+package notification;
+option go_package = "github.com/peyman-se/protos/notification;notification";
+
+message NotificationRequest {
+  string subject = 2;
+  string body = 3;
+  int64 sendAt = 4;
+  //route can be email, sms, push, telegram, etc.
+  string route = 5;
+  //channel can be email, phone number, websocket, telegram, etc. 
+  string channel = 6;
+}
+
+message NotificationResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+service NotificationService {
+  rpc Notify(NotificationRequest) returns (NotificationResponse);
+}
