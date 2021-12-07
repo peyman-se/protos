@@ -1,6 +1,6 @@
 syntax="proto3";
 
-option go_package = "/notification";
+option go_package = "github.com/peyman-se/protos/notification";
 package notification;
 
 message NotificationRequest {
