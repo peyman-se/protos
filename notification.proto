@@ -19,5 +19,5 @@ message NotificationResponse {
 }
 
 service NotificationService {
-  rpc Notify(NotificationRequest) returns (NotificationResponse);
+  rpc Notify(NotificationRequest) returns (NotificationResponse){};
 }
