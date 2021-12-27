@@ -97,5 +97,5 @@ var NotificationService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "notification.proto",
+	Metadata: "notification/notification.proto",
 }

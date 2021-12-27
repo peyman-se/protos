@@ -1,0 +1,86 @@
+syntax="proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/peyman-se/protos/chat";
+package chat;
+
+message Message {
+    string ID = 1;
+	string ChannelID = 2;
+    string SenderID = 3;
+	string Content = 4;
+	string MediaType = 5;
+	string MediaURL = 6;
+	google.protobuf.Timestamp CreatedAt = 7;
+	google.protobuf.Timestamp UpdatedAt = 8;
+}
+
+message Channel {
+    string ID = 1;
+	string Name = 2;
+	string OwnerID = 3;
+	google.protobuf.Timestamp LastMessageAt = 4;
+	string LastMessage = 5;
+	string LastMessageUserID = 6;
+	google.protobuf.Timestamp CreatedAt = 7;
+	google.protobuf.Timestamp UpdatedAt = 8;
+}
+
+message GetChannelMessagesRequest {
+    string UserID = 1;
+    string ChannelID = 2;
+}
+
+message GetChannelMessagesResponse {
+    repeated Message messages = 1;
+    int64 Page = 2;
+}
+
+message PostChannelMessageRequest {
+    string UserID = 1;
+    string ChannelID = 2;
+    string Content = 3;
+    optional string MediaType = 4;
+	optional string MediaURL = 5;
+}
+
+message PostChannelMessageResponse {
+    Message Message = 1;
+}
+
+message UpdateChannelMessageRequest {
+    string Content = 4;
+    optional string MediaType = 5;
+    optional string MediaURL = 6;
+}
+
+message UpdateChannelMessageResponse {
+    Message Message = 1;
+}
+
+message GetUserChannelsRequest {
+    string UserID = 1;
+}
+
+message GetUserChannelsResponse {
+    repeated Channel channels = 1;
+}
+
+message CreateChannelRequest {
+    string UserID = 1;
+    optional string Name = 2;
+}
+
+message CreateChannelResponse {
+    Channel Channel = 1;
+}
+
+service ChatService {
+    rpc GetChannelMessages (GetChannelMessagesRequest) returns (GetChannelMessagesResponse) {};
+    rpc PostChannelMessage (PostChannelMessageRequest) returns (PostChannelMessageResponse) {};
+    rpc UpdateChannelMessage (UpdateChannelMessageRequest) returns (UpdateChannelMessageResponse) {};
+    rpc GetUserChannels (GetUserChannelsRequest) returns (GetUserChannelsResponse) {};
+    rpc CreateChannel (CreateChannelRequest) returns (CreateChannelResponse) {};
+}
+
