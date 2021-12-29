@@ -1,0 +1,29 @@
+syntax="proto3";
+
+option go_package = "github.com/peyman-se/protos/auth";
+package auth;
+
+message LoginRequest {
+    //username can be mobile phone number or email or anything else.
+    string username = 1;
+    string password = 2;
+    //email, phone
+    optional string authType = 3;
+}
+
+message GetUserFromTokenRequest {
+    string token = 1;
+}
+
+message Token {
+    string value = 1;
+}
+
+message UserID {
+    string value = 1;
+}
+
+service AuthService {
+    rpc Login(LoginRequest) returns (Token);
+    rpc GetUserIDFromToken(GetUserFromTokenRequest) returns (UserID);
+}
