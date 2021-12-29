@@ -36,8 +36,8 @@ func NewAuthServiceEndpoints() []*api.Endpoint {
 // Client API for AuthService service
 
 type AuthService interface {
-	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*Token, error)
-	GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, opts ...client.CallOption) (*UserID, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error)
+	GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, opts ...client.CallOption) (*VerificationResponse, error)
 }
 
 type authService struct {
@@ -52,9 +52,9 @@ func NewAuthService(name string, c client.Client) AuthService {
 	}
 }
 
-func (c *authService) Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*Token, error) {
+func (c *authService) Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error) {
 	req := c.c.NewRequest(c.name, "AuthService.Login", in)
-	out := new(Token)
+	out := new(LoginResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,9 +62,9 @@ func (c *authService) Login(ctx context.Context, in *LoginRequest, opts ...clien
 	return out, nil
 }
 
-func (c *authService) GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, opts ...client.CallOption) (*UserID, error) {
+func (c *authService) GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, opts ...client.CallOption) (*VerificationResponse, error) {
 	req := c.c.NewRequest(c.name, "AuthService.GetUserIDFromToken", in)
-	out := new(UserID)
+	out := new(VerificationResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,14 +75,14 @@ func (c *authService) GetUserIDFromToken(ctx context.Context, in *GetUserFromTok
 // Server API for AuthService service
 
 type AuthServiceHandler interface {
-	Login(context.Context, *LoginRequest, *Token) error
-	GetUserIDFromToken(context.Context, *GetUserFromTokenRequest, *UserID) error
+	Login(context.Context, *LoginRequest, *LoginResponse) error
+	GetUserIDFromToken(context.Context, *GetUserFromTokenRequest, *VerificationResponse) error
 }
 
 func RegisterAuthServiceHandler(s server.Server, hdlr AuthServiceHandler, opts ...server.HandlerOption) error {
 	type authService interface {
-		Login(ctx context.Context, in *LoginRequest, out *Token) error
-		GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, out *UserID) error
+		Login(ctx context.Context, in *LoginRequest, out *LoginResponse) error
+		GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, out *VerificationResponse) error
 	}
 	type AuthService struct {
 		authService
@@ -95,10 +95,10 @@ type authServiceHandler struct {
 	AuthServiceHandler
 }
 
-func (h *authServiceHandler) Login(ctx context.Context, in *LoginRequest, out *Token) error {
+func (h *authServiceHandler) Login(ctx context.Context, in *LoginRequest, out *LoginResponse) error {
 	return h.AuthServiceHandler.Login(ctx, in, out)
 }
 
-func (h *authServiceHandler) GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, out *UserID) error {
+func (h *authServiceHandler) GetUserIDFromToken(ctx context.Context, in *GetUserFromTokenRequest, out *VerificationResponse) error {
 	return h.AuthServiceHandler.GetUserIDFromToken(ctx, in, out)
 }

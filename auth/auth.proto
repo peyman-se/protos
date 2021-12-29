@@ -15,15 +15,15 @@ message GetUserFromTokenRequest {
     string token = 1;
 }
 
-message Token {
-    string value = 1;
+message LoginResponse {
+    string token = 1;
 }
 
-message UserID {
-    string value = 1;
+message VerificationResponse {
+    string userID = 1;
 }
 
 service AuthService {
-    rpc Login(LoginRequest) returns (Token);
-    rpc GetUserIDFromToken(GetUserFromTokenRequest) returns (UserID);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc GetUserIDFromToken(GetUserFromTokenRequest) returns (VerificationResponse);
 }
