@@ -19,11 +19,12 @@ message LoginResponse {
     string token = 1;
 }
 
-message VerificationResponse {
-    string userID = 1;
+message GetUserFromTokenResponse {
+    string id = 1;
+    string username = 2;
 }
 
 service AuthService {
     rpc Login(LoginRequest) returns (LoginResponse);
-    rpc GetUserIDFromToken(GetUserFromTokenRequest) returns (VerificationResponse);
+    rpc GetUserIDFromToken(GetUserFromTokenRequest) returns (GetUserFromTokenResponse);
 }
