@@ -26,5 +26,5 @@ message GetUserFromTokenResponse {
 
 service AuthService {
     rpc Login(LoginRequest) returns (LoginResponse);
-    rpc GetUserIDFromToken(GetUserFromTokenRequest) returns (GetUserFromTokenResponse);
+    rpc GetUserFromToken(GetUserFromTokenRequest) returns (GetUserFromTokenResponse);
 }
