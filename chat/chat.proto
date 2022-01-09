@@ -31,6 +31,7 @@ message Channel {
 message GetChannelMessagesRequest {
     string UserID = 1;
     string ChannelID = 2;
+    int64 Page = 3;
 }
 
 message GetChannelMessagesResponse {
@@ -47,16 +48,6 @@ message PostChannelMessageRequest {
 }
 
 message PostChannelMessageResponse {
-    Message Message = 1;
-}
-
-message UpdateChannelMessageRequest {
-    string Content = 4;
-    optional string MediaType = 5;
-    optional string MediaURL = 6;
-}
-
-message UpdateChannelMessageResponse {
     Message Message = 1;
 }
 
@@ -80,7 +71,6 @@ message CreateChannelResponse {
 service ChatService {
     rpc GetChannelMessages (GetChannelMessagesRequest) returns (GetChannelMessagesResponse) {};
     rpc PostChannelMessage (PostChannelMessageRequest) returns (PostChannelMessageResponse) {};
-    rpc UpdateChannelMessage (UpdateChannelMessageRequest) returns (UpdateChannelMessageResponse) {};
     rpc GetUserChannels (GetUserChannelsRequest) returns (GetUserChannelsResponse) {};
     rpc CreateChannel (CreateChannelRequest) returns (CreateChannelResponse) {};
 }

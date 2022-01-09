@@ -39,7 +39,6 @@ func NewChatServiceEndpoints() []*api.Endpoint {
 type ChatService interface {
 	GetChannelMessages(ctx context.Context, in *GetChannelMessagesRequest, opts ...client.CallOption) (*GetChannelMessagesResponse, error)
 	PostChannelMessage(ctx context.Context, in *PostChannelMessageRequest, opts ...client.CallOption) (*PostChannelMessageResponse, error)
-	UpdateChannelMessage(ctx context.Context, in *UpdateChannelMessageRequest, opts ...client.CallOption) (*UpdateChannelMessageResponse, error)
 	GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, opts ...client.CallOption) (*GetUserChannelsResponse, error)
 	CreateChannel(ctx context.Context, in *CreateChannelRequest, opts ...client.CallOption) (*CreateChannelResponse, error)
 }
@@ -76,16 +75,6 @@ func (c *chatService) PostChannelMessage(ctx context.Context, in *PostChannelMes
 	return out, nil
 }
 
-func (c *chatService) UpdateChannelMessage(ctx context.Context, in *UpdateChannelMessageRequest, opts ...client.CallOption) (*UpdateChannelMessageResponse, error) {
-	req := c.c.NewRequest(c.name, "ChatService.UpdateChannelMessage", in)
-	out := new(UpdateChannelMessageResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *chatService) GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, opts ...client.CallOption) (*GetUserChannelsResponse, error) {
 	req := c.c.NewRequest(c.name, "ChatService.GetUserChannels", in)
 	out := new(GetUserChannelsResponse)
@@ -111,7 +100,6 @@ func (c *chatService) CreateChannel(ctx context.Context, in *CreateChannelReques
 type ChatServiceHandler interface {
 	GetChannelMessages(context.Context, *GetChannelMessagesRequest, *GetChannelMessagesResponse) error
 	PostChannelMessage(context.Context, *PostChannelMessageRequest, *PostChannelMessageResponse) error
-	UpdateChannelMessage(context.Context, *UpdateChannelMessageRequest, *UpdateChannelMessageResponse) error
 	GetUserChannels(context.Context, *GetUserChannelsRequest, *GetUserChannelsResponse) error
 	CreateChannel(context.Context, *CreateChannelRequest, *CreateChannelResponse) error
 }
@@ -120,7 +108,6 @@ func RegisterChatServiceHandler(s server.Server, hdlr ChatServiceHandler, opts .
 	type chatService interface {
 		GetChannelMessages(ctx context.Context, in *GetChannelMessagesRequest, out *GetChannelMessagesResponse) error
 		PostChannelMessage(ctx context.Context, in *PostChannelMessageRequest, out *PostChannelMessageResponse) error
-		UpdateChannelMessage(ctx context.Context, in *UpdateChannelMessageRequest, out *UpdateChannelMessageResponse) error
 		GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, out *GetUserChannelsResponse) error
 		CreateChannel(ctx context.Context, in *CreateChannelRequest, out *CreateChannelResponse) error
 	}
@@ -141,10 +128,6 @@ func (h *chatServiceHandler) GetChannelMessages(ctx context.Context, in *GetChan
 
 func (h *chatServiceHandler) PostChannelMessage(ctx context.Context, in *PostChannelMessageRequest, out *PostChannelMessageResponse) error {
 	return h.ChatServiceHandler.PostChannelMessage(ctx, in, out)
-}
-
-func (h *chatServiceHandler) UpdateChannelMessage(ctx context.Context, in *UpdateChannelMessageRequest, out *UpdateChannelMessageResponse) error {
-	return h.ChatServiceHandler.UpdateChannelMessage(ctx, in, out)
 }
 
 func (h *chatServiceHandler) GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, out *GetUserChannelsResponse) error {
