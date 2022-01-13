@@ -26,6 +26,8 @@ message Channel {
 	string LastMessageUserID = 6;
 	google.protobuf.Timestamp CreatedAt = 7;
 	google.protobuf.Timestamp UpdatedAt = 8;
+    string TenantID = 9;
+    bool IsExternal = 10;
 }
 
 message GetChannelMessagesRequest {
@@ -36,7 +38,8 @@ message GetChannelMessagesRequest {
 
 message GetChannelMessagesResponse {
     repeated Message messages = 1;
-    int64 Page = 2;
+    repeated string  Notifiables = 2;
+    int64 Page = 3;
 }
 
 message PostChannelMessageRequest {
@@ -49,6 +52,7 @@ message PostChannelMessageRequest {
 
 message PostChannelMessageResponse {
     Message Message = 1;
+    repeated string  Notifiables = 2;
 }
 
 message GetUserChannelsRequest {
@@ -57,15 +61,19 @@ message GetUserChannelsRequest {
 
 message GetUserChannelsResponse {
     repeated Channel channels = 1;
+    repeated string  Notifiables = 2;
 }
 
 message CreateChannelRequest {
     string UserID = 1;
-    optional string Name = 2;
+    string IsExternal = 2;
+    string TenantID = 3;
+    optional string Name = 4;
 }
 
 message CreateChannelResponse {
     Channel Channel = 1;
+    repeated string  Notifiables = 2;
 }
 
 service ChatService {
