@@ -9,25 +9,33 @@ package chat;
 message Message {
     string ID = 1;
 	string ChannelID = 2;
-    string SenderID = 3;
+    User Sender = 3;
 	string Content = 4;
 	string MediaType = 5;
 	string MediaURL = 6;
 	google.protobuf.Timestamp CreatedAt = 7;
 	google.protobuf.Timestamp UpdatedAt = 8;
+    string Route = 9;
+}
+
+message User {
+    string UserID = 1;
+    string TenantID = 2;
+    bool IsExternal = 3;
 }
 
 message Channel {
     string ID = 1;
 	string Name = 2;
-	string OwnerID = 3;
-	google.protobuf.Timestamp LastMessageAt = 4;
-	string LastMessage = 5;
-	string LastMessageUserID = 6;
-	google.protobuf.Timestamp CreatedAt = 7;
-	google.protobuf.Timestamp UpdatedAt = 8;
-    string TenantID = 9;
-    bool IsExternal = 10;
+	google.protobuf.Timestamp LastMessageAt = 3;
+	string LastMessage = 4;
+	string LastMessageUserID = 5;
+    string TenantID = 6;
+    bool IsExternal = 7;
+    repeated User Users = 8;
+	google.protobuf.Timestamp CreatedAt = 9;
+	google.protobuf.Timestamp UpdatedAt = 10;
+    
 }
 
 message GetChannelMessagesRequest {
@@ -38,25 +46,26 @@ message GetChannelMessagesRequest {
 
 message GetChannelMessagesResponse {
     repeated Message messages = 1;
-    repeated string  Notifiables = 2;
+    User User = 2;
     int64 Page = 3;
 }
 
 message PostChannelMessageRequest {
-    string UserID = 1;
-    string ChannelID = 2;
-    string Content = 3;
-    optional string MediaType = 4;
-	optional string MediaURL = 5;
+    string ChannelID = 1;
+    string Content = 2;
+    optional string MediaType = 3;
+	optional string MediaURL = 4;
+    repeated User Users = 5;
 }
 
 message PostChannelMessageResponse {
     Message Message = 1;
-    repeated string  Notifiables = 2;
+    Channel Channel = 2;
+    repeated User Users = 3;
 }
 
 message GetUserChannelsRequest {
-    string UserID = 1;
+    User User = 1;
 }
 
 message GetUserChannelsResponse {
@@ -64,22 +73,8 @@ message GetUserChannelsResponse {
     repeated string  Notifiables = 2;
 }
 
-message CreateChannelRequest {
-    string UserID = 1;
-    string IsExternal = 2;
-    string TenantID = 3;
-    optional string Name = 4;
-}
-
-message CreateChannelResponse {
-    Channel Channel = 1;
-    repeated string  Notifiables = 2;
-}
-
 service ChatService {
     rpc GetChannelMessages (GetChannelMessagesRequest) returns (GetChannelMessagesResponse) {};
     rpc PostChannelMessage (PostChannelMessageRequest) returns (PostChannelMessageResponse) {};
     rpc GetUserChannels (GetUserChannelsRequest) returns (GetUserChannelsResponse) {};
-    rpc CreateChannel (CreateChannelRequest) returns (CreateChannelResponse) {};
 }
-

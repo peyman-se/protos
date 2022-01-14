@@ -40,7 +40,6 @@ type ChatService interface {
 	GetChannelMessages(ctx context.Context, in *GetChannelMessagesRequest, opts ...client.CallOption) (*GetChannelMessagesResponse, error)
 	PostChannelMessage(ctx context.Context, in *PostChannelMessageRequest, opts ...client.CallOption) (*PostChannelMessageResponse, error)
 	GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, opts ...client.CallOption) (*GetUserChannelsResponse, error)
-	CreateChannel(ctx context.Context, in *CreateChannelRequest, opts ...client.CallOption) (*CreateChannelResponse, error)
 }
 
 type chatService struct {
@@ -85,23 +84,12 @@ func (c *chatService) GetUserChannels(ctx context.Context, in *GetUserChannelsRe
 	return out, nil
 }
 
-func (c *chatService) CreateChannel(ctx context.Context, in *CreateChannelRequest, opts ...client.CallOption) (*CreateChannelResponse, error) {
-	req := c.c.NewRequest(c.name, "ChatService.CreateChannel", in)
-	out := new(CreateChannelResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for ChatService service
 
 type ChatServiceHandler interface {
 	GetChannelMessages(context.Context, *GetChannelMessagesRequest, *GetChannelMessagesResponse) error
 	PostChannelMessage(context.Context, *PostChannelMessageRequest, *PostChannelMessageResponse) error
 	GetUserChannels(context.Context, *GetUserChannelsRequest, *GetUserChannelsResponse) error
-	CreateChannel(context.Context, *CreateChannelRequest, *CreateChannelResponse) error
 }
 
 func RegisterChatServiceHandler(s server.Server, hdlr ChatServiceHandler, opts ...server.HandlerOption) error {
@@ -109,7 +97,6 @@ func RegisterChatServiceHandler(s server.Server, hdlr ChatServiceHandler, opts .
 		GetChannelMessages(ctx context.Context, in *GetChannelMessagesRequest, out *GetChannelMessagesResponse) error
 		PostChannelMessage(ctx context.Context, in *PostChannelMessageRequest, out *PostChannelMessageResponse) error
 		GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, out *GetUserChannelsResponse) error
-		CreateChannel(ctx context.Context, in *CreateChannelRequest, out *CreateChannelResponse) error
 	}
 	type ChatService struct {
 		chatService
@@ -132,8 +119,4 @@ func (h *chatServiceHandler) PostChannelMessage(ctx context.Context, in *PostCha
 
 func (h *chatServiceHandler) GetUserChannels(ctx context.Context, in *GetUserChannelsRequest, out *GetUserChannelsResponse) error {
 	return h.ChatServiceHandler.GetUserChannels(ctx, in, out)
-}
-
-func (h *chatServiceHandler) CreateChannel(ctx context.Context, in *CreateChannelRequest, out *CreateChannelResponse) error {
-	return h.ChatServiceHandler.CreateChannel(ctx, in, out)
 }
