@@ -1,0 +1,164 @@
+syntax="proto3";
+//protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=. calendar.proto
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/peyman-se/protos/calendar";
+package calendar;
+
+message Calendar {
+    string ID = 1;
+	string UserID = 2;
+    string GroupID = 3;
+    string Name = 4;
+}
+
+message User {
+    string ID = 1;
+    string TenantID = 2;
+    string Username = 3;
+    string Name = 4;
+}
+
+message Guest {
+    string ID = 1;
+    string TenantID = 2;
+    string Name = 3;
+    string Email = 4;
+    string Phone = 5;
+    string Pronouns = 6;
+    string Address = 7;
+}
+
+//Event is private between users
+message Event {
+    string ID = 1;
+    string CalendarID = 2;
+    string Name = 3;
+    string Description = 4;
+    string Location = 5;
+    string StartTime = 6;
+    string EndTime = 7;
+    string IsAllDay = 8;
+    string Recurrence = 9;//daily, weekly, monthly, yearly
+    string RecurAt = 10;
+    string RemindAt = 11;
+    repeated User Invitees = 12;
+    string Owner = 13;
+    string LocationLink = 14;
+}
+
+//booking is booked by guest
+message Booking {
+    string ID = 1;
+    string CalendarID = 2;
+    string GuestID = 3;
+    string StartTime = 4;
+    string EndTime = 5;
+    string Status = 6;//paid, canceled, scheduled, done
+
+    string RemindMinutesBefore = 8;
+    optional google.protobuf.Timestamp RemindAt = 9;
+    google.protobuf.Timestamp CreatedAt = 10;
+    google.protobuf.Timestamp UpdatedAt = 11;
+
+    string Name = 12;
+    string Description = 13;
+    string NoteToClient = 14;
+    string Location = 15;//physical location, online, phone call, etc
+    string LocationLink = 16;
+    bool IsPaymentRequired = 17;
+    optional string PaymentID = 18;
+    optional string RescheduledFromEventID = 19;
+}
+
+message Availablitiy {
+    string ID = 1;
+    string CalendarID = 2;
+    string StartTime = 3;
+    string EndTime = 4;
+}
+
+service CalendarService {
+    rpc CreateAvailability (CreateAvailabilityRequest) returns (CreateAvailabilityResponse) {};
+    rpc GetAvailabilities (GetAvailabilitiesRequest) returns (GetAvailabilitiesResponse) {};
+    rpc UpdateAvailability (UpdateAvailabilityRequest) returns (UpdateAvailabilityResponse) {};
+    rpc DeleteAvailability (DeleteAvailabilityRequest) returns (DeleteAvailabilityResponse) {};
+
+    rpc GetCalendars (GetCalendarsRequest) returns (GetCalendarsResponse) {};
+    rpc CreateCalendar (CreateCalendarRequest) returns (CreateCalendarResponse) {};
+    rpc DeleteCalendar (DeleteCalendarRequest) returns (DeleteCalendarResponse) {};
+    rpc UpdateCalendar (UpdateCalendarRequest) returns (UpdateCalendarResponse) {};
+
+    rpc CreateBooking (CreateBookingRequest) returns (CreateBookingResponse) {};
+    rpc CancelBooking (CancelBookingRequest) returns (CancelBookingResponse) {};
+
+    rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse) {};
+    rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse) {};
+    rpc GetEvents (GetEventsRequest) returns (GetEventsResponse) {};
+    rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse) {};
+}
+
+
+message CreateAvailabilityRequest {}
+message CreateAvailabilityResponse {}
+
+message GetAvailabilitiesRequest {}
+message GetAvailabilitiesResponse {}
+
+message UpdateAvailabilityRequest {}
+message UpdateAvailabilityResponse {}
+
+message DeleteAvailabilityRequest {}
+message DeleteAvailabilityResponse {}
+
+message GetCalendarsRequest {}
+message GetCalendarsResponse {
+    repeated Calendar Calendar = 1;
+}
+message CreateCalendarRequest {
+    Calendar Calendar = 1;
+}
+message CreateCalendarResponse {
+    Calendar Calendar = 1;
+}
+message DeleteCalendarRequest {
+    string CalendarID = 1;
+    string UserID = 2;
+}
+message DeleteCalendarResponse {}
+message UpdateCalendarRequest {
+    Calendar Calendar = 1;
+}
+message UpdateCalendarResponse {
+    Calendar Calendar = 1;
+}
+
+message CreateBookingRequest {
+    Booking Booking = 1;
+}
+message CreateBookingResponse {
+    Booking Booking = 1;
+}
+
+message CancelBookingRequest {
+    string BookingID = 1;
+}
+message CancelBookingResponse {}
+
+message CreateEventRequest {
+    Event Event = 1;
+}
+message CreateEventResponse {}
+
+message UpdateEventRequest {}
+message UpdateEventResponse {}
+
+message GetEventsRequest {}
+message GetEventsResponse {
+    repeated Event Event = 1;
+}
+
+message DeleteEventRequest {}
+message DeleteEventResponse {}
+

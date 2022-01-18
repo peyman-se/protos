@@ -1,0 +1,56 @@
+syntax="proto3";
+//protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=. featureflag.proto
+
+option go_package = "github.com/peyman-se/protos/featureflag";
+package featureflag;
+
+message Service {
+    string ID = 1;
+    string Name = 2;
+}
+
+message Client {
+    string ID = 1;
+    string Name = 2;
+}
+
+message Feature {
+    string ID = 1;
+    string Name = 2;
+    bool Enabled = 3;
+}
+
+service FeatureFlagService {
+    rpc GetServices (GetServicesRequest) returns (GetServicesResponse) {};
+    rpc GetClients (GetClientsRequest) returns (GetClientsResponse) {};
+    rpc GetFeatures (GetFeaturesRequest) returns (GetFeaturesResponse) {};
+    rpc ToggleFeature (ToggleFeatureRequest) returns (ToggleFeatureResponse) {};
+
+}
+
+message GetServicesRequest {}
+message GetServicesResponse {
+    repeated Service Services = 1;
+}
+
+message GetClientsRequest {}
+message GetClientsResponse {
+    repeated Client Clients = 1;
+}
+
+message GetFeaturesRequest {
+    string ServiceID = 1;
+    string ClientID = 2;
+}
+
+message GetFeaturesResponse {
+    repeated Feature Features = 1;
+}
+
+message ToggleFeatureRequest {
+    string ClientID = 1;
+    string FeatureID = 2;
+    bool Enabled = 3;
+}
+
+message ToggleFeatureResponse {}

@@ -31,15 +31,15 @@ message Channel {
 	string LastMessage = 4;
 	string LastMessageUserID = 5;
     string TenantID = 6;
-    bool IsExternal = 7;
+    bool IsQueued = 7;
     repeated User Users = 8;
-	google.protobuf.Timestamp CreatedAt = 9;
-	google.protobuf.Timestamp UpdatedAt = 10;
+	optional google.protobuf.Timestamp CreatedAt = 9;
+	optional google.protobuf.Timestamp UpdatedAt = 10;
     
 }
 
 message GetChannelMessagesRequest {
-    string UserID = 1;
+    User User = 1;
     string ChannelID = 2;
     int64 Page = 3;
 }
@@ -70,7 +70,7 @@ message GetUserChannelsRequest {
 
 message GetUserChannelsResponse {
     repeated Channel channels = 1;
-    repeated string  Notifiables = 2;
+    User  User = 2;
 }
 
 service ChatService {
